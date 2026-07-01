@@ -8,6 +8,49 @@
     <div v-if="loading" class="loading">{{ t('common.loading') }}</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
+      <div v-if="restockOrders.length > 0" class="card submitted-orders-card">
+        <div class="card-header">
+          <h3 class="card-title">{{ t('orders.submittedOrders.title') }} ({{ restockOrders.length }})</h3>
+        </div>
+        <div class="table-container">
+          <table class="restock-orders-table">
+            <thead>
+              <tr>
+                <th>{{ t('orders.submittedOrders.orderNumber') }}</th>
+                <th>{{ t('orders.submittedOrders.submittedDate') }}</th>
+                <th>{{ t('orders.submittedOrders.itemsSummary') }}</th>
+                <th>{{ t('orders.submittedOrders.totalValue') }}</th>
+                <th class="col-lead-time">{{ t('orders.submittedOrders.leadTime') }}</th>
+                <th>{{ t('orders.submittedOrders.expectedDelivery') }}</th>
+                <th>{{ t('orders.submittedOrders.status') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="restockOrder in restockOrders" :key="restockOrder.id">
+                <td><strong>{{ restockOrder.order_number }}</strong></td>
+                <td>{{ formatDate(restockOrder.order_date) }}</td>
+                <td>
+                  {{ t('orders.submittedOrders.itemsSummaryText', {
+                    count: restockOrder.items.length,
+                    units: totalUnits(restockOrder).toLocaleString()
+                  }) }}
+                </td>
+                <td><strong>{{ currencySymbol }}{{ restockOrder.total_value.toLocaleString() }}</strong></td>
+                <td class="col-lead-time">
+                  <span class="lead-time-badge">
+                    {{ t('orders.submittedOrders.leadTimeDays', { days: restockOrder.lead_time_days }) }}
+                  </span>
+                </td>
+                <td>{{ formatDate(restockOrder.expected_delivery) }}</td>
+                <td>
+                  <span class="badge info">{{ t('status.submitted') }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="stats-grid">
         <div class="stat-card success">
           <div class="stat-label">{{ t('status.delivered') }}</div>
@@ -95,6 +138,7 @@ export default {
     const loading = ref(true)
     const error = ref(null)
     const orders = ref([])
+    const restockOrders = ref([])
 
     // Use shared filters
     const {
@@ -122,6 +166,16 @@ export default {
       } finally {
         loading.value = false
       }
+
+      try {
+        restockOrders.value = await api.getRestockOrders()
+      } catch (err) {
+        console.error('Failed to load restock orders:', err)
+      }
+    }
+
+    const totalUnits = (restockOrder) => {
+      return restockOrder.items.reduce((sum, item) => sum + item.quantity, 0)
     }
 
     // Watch for filter changes and reload data
@@ -160,6 +214,8 @@ export default {
       loading,
       error,
       orders,
+      restockOrders,
+      totalUnits,
       getOrdersByStatus,
       getOrderStatusClass,
       formatDate,
@@ -172,6 +228,24 @@ export default {
 </script>
 
 <style scoped>
+.submitted-orders-card {
+  border-left: 4px solid #2563eb;
+}
+
+.restock-orders-table .col-lead-time {
+  width: 130px;
+}
+
+.lead-time-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
 /* Fixed table layout to prevent column shifting */
 .orders-table {
   table-layout: fixed;
