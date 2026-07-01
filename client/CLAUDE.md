@@ -345,6 +345,7 @@ watchDebounced(
 - ✅ Use computed properties for derived data
 - ✅ Always show loading and error states
 - ✅ Stick to Composition API throughout project
+- ✅ Always document non-obvious logic changes with comments
 
 ### API Integration
 
