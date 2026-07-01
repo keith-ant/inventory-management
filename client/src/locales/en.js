@@ -6,6 +6,7 @@ export default {
     orders: 'Orders',
     finance: 'Finance',
     demandForecast: 'Demand Forecast',
+    restocking: 'Restocking',
     companyName: 'Catalyst Components',
     subtitle: 'Inventory Management System'
   },
@@ -112,6 +113,18 @@ export default {
     onTimeDelivery: 'On-Time Delivery',
     itemsCount: '{count} items',
     quantity: 'Qty',
+    submittedOrders: {
+      title: 'Submitted Orders',
+      orderNumber: 'Order #',
+      submittedDate: 'Submitted',
+      itemsSummary: 'Items',
+      itemsSummaryText: '{count} items · {units} units',
+      totalValue: 'Total Value',
+      leadTime: 'Lead Time',
+      leadTimeDays: '{days} days',
+      expectedDelivery: 'Expected Delivery',
+      status: 'Status'
+    },
     table: {
       orderNumber: 'Order Number',
       orderId: 'Order ID',
@@ -188,6 +201,38 @@ export default {
     }
   },
 
+  // Restocking
+  restocking: {
+    title: 'Restocking',
+    description: 'Get budget-optimized restock recommendations based on demand shortfall',
+    budgetLabel: 'Restock Budget',
+    summary: {
+      budget: 'Budget',
+      recommendedCost: 'Recommended Total Cost',
+      remainingBudget: 'Remaining Budget',
+      itemsRecommended: 'Items Recommended'
+    },
+    skippedItemsNote: '{count} more items exceed the remaining budget',
+    placeOrder: 'Place Order',
+    placingOrder: 'Placing Order...',
+    orderSuccess: 'Order {orderNumber} submitted successfully. Expected delivery: {date}.',
+    viewInOrders: 'View in Orders',
+    noRecommendations: 'No restock recommendations for the selected budget',
+    table: {
+      item: 'Item',
+      category: 'Category',
+      trend: 'Trend',
+      shortfall: 'Shortfall',
+      recommendedQty: 'Recommended Qty',
+      unitCost: 'Unit Cost',
+      lineTotal: 'Line Total',
+      leadTime: 'Lead Time'
+    },
+    partial: 'Partial',
+    qtyOfShortfall: '{qty} of {shortfall}',
+    leadTimeDays: '{days} days'
+  },
+
   // Filters
   filters: {
     timePeriod: 'Time Period',
@@ -206,7 +251,8 @@ export default {
     backordered: 'Backordered',
     inStock: 'In Stock',
     lowStock: 'Low Stock',
-    adequate: 'Adequate'
+    adequate: 'Adequate',
+    submitted: 'Submitted'
   },
 
   // Trends
